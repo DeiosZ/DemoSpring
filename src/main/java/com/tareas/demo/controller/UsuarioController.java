@@ -34,4 +34,9 @@ public class UsuarioController {
     public Usuario actualizar(@PathVariable Integer id, @RequestBody Usuario usuario){
         return  usuarioService.actualizarUsuario(id,usuario);
     }
+
+    @DeleteMapping("/{id}")
+    public void eliminar(@PathVariable Integer id){
+        usuarioService.eliminarUsuario(id);
+    }
 }

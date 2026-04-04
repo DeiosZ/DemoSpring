@@ -39,6 +39,10 @@ public class UsuarioService {
 
     //eliminar usuario
     public void eliminarUsuario(Integer id){
-        repo.deleteById(id);
+        Usuario usuario = usuarioPorId(id);
+        if (usuario.getTareas() != null) {
+            usuario.getTareas().clear();
+        }
+        repo.delete(usuario);
     }
 }
