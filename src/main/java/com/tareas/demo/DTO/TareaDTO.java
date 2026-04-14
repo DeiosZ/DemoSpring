@@ -9,14 +9,14 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TareaDTO {
-    private Integer id;
+    private Long id;
     private String name;
     private String description;
     private LocalDateTime startAt;
     private LocalDateTime finishAt;
     private Boolean isFinish;
 
-    private Integer projectId;
-    private Integer priorityId;
-    private List<Integer> tagIds;
+    private Long projectId;
+    private Long priorityId;
+    private List<Long> tagIds;
 }
