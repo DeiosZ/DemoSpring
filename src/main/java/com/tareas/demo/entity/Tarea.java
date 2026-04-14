@@ -1,9 +1,8 @@
 package com.tareas.demo.entity;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,15 +11,33 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Tarea {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String titulo;
-    private String descripcion;
+    private String name;
+    private String description;
+
+    private LocalDateTime startAt;
+    private LocalDateTime finishAt;
+
+    private Boolean isFinish;
+    private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name="usuario_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Usuario usuario;
+    @JoinColumn(name = "project_id")
+    private Proyecto proyecto;
+
+    @ManyToOne
+    @JoinColumn(name = "priority_id")
+    private Prioridad prioridad;
+
+    @ManyToMany
+    @JoinTable(
+            name = "task_tag",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags;
 }

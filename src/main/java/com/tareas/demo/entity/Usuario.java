@@ -1,10 +1,9 @@
 package com.tareas.demo.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,9 +17,14 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Integer id;
     private String nombre;
+    private String apellido;
     private String email;
+    private String image;
+    private String password;
+    private Boolean isAdmin;
+    private Boolean isActive;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnore
-    private List<Tarea> tareas;
+    private List<Proyecto> proyectos;
 }
