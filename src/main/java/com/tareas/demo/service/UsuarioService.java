@@ -20,8 +20,11 @@ public class UsuarioService {
     private UsuarioRepository repo;
 
     //Listar usuarios
-    public List<Usuario> listar(){
-        return repo.findAll();
+    public List<UsuarioDTO> listar(){
+        return repo.findAll()
+                .stream()
+                .map(UsuarioMapper::toDTO)
+                .toList();
     }
 
     public UsuarioDTO login(LoginDTO dto){

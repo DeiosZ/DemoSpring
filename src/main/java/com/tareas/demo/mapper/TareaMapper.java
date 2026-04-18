@@ -1,8 +1,14 @@
 package com.tareas.demo.mapper;
 
+import com.tareas.demo.DTO.TareaCreateDTO;
 import com.tareas.demo.DTO.TareaDTO;
+import com.tareas.demo.entity.Prioridad;
+import com.tareas.demo.entity.Proyecto;
 import com.tareas.demo.entity.Tag;
 import com.tareas.demo.entity.Tarea;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class TareaMapper {
     public static TareaDTO toDTO(Tarea t){
@@ -17,8 +23,26 @@ public class TareaMapper {
                 .priorityId(t.getPrioridad().getId())
                 .tagIds(t.getTags()
                         .stream()
-                        .map(Tag::getId).toList()
+                        .map(tag -> tag.getId())
+                        .toList()
                 )
+                .build();
+    }
+
+    public static Tarea toEntity(TareaCreateDTO dto,
+                                 Proyecto proyecto,
+                                 Prioridad prioridad,
+                                 List<Tag> tags) {
+
+        return Tarea.builder()
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .startAt(dto.getStartAt())
+                .isFinish(false)
+                .createdAt(LocalDateTime.now())
+                .proyecto(proyecto)
+                .prioridad(prioridad)
+                .tags(tags)
                 .build();
     }
 }

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TareaRepository extends JpaRepository<Tarea,Integer> {
-
+public interface TareaRepository extends JpaRepository<Tarea,Long> {
+    List<Tarea> findByProyectoId(Long proyectoId);
 }

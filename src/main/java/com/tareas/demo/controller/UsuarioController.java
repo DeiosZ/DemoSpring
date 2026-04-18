@@ -1,5 +1,6 @@
 package com.tareas.demo.controller;
 
+import com.tareas.demo.DTO.UsuarioDTO;
 import com.tareas.demo.entity.Usuario;
 import com.tareas.demo.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @GetMapping("/")
-    public List<Usuario> listar(){
+    public List<UsuarioDTO> listar(){
         return usuarioService.listar();
     }
 /*
