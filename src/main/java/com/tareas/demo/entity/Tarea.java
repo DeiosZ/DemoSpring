@@ -1,15 +1,15 @@
 package com.tareas.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import javax.net.ssl.SSLSession;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "task")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
 public class Tarea {
 
     @Id

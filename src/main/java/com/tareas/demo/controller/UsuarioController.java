@@ -19,7 +19,7 @@ public class UsuarioController {
     public List<Usuario> listar(){
         return usuarioService.listar();
     }
-
+/*
     @GetMapping("/{id}")
     public Usuario obtener(@PathVariable Integer id){
         return usuarioService.usuarioPorId(id);
@@ -39,4 +39,6 @@ public class UsuarioController {
     public void eliminar(@PathVariable Integer id){
         usuarioService.eliminarUsuario(id);
     }
+
+ */
 }

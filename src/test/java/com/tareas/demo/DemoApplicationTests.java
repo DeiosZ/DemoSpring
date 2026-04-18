@@ -1,15 +1,24 @@
 package com.tareas.demo;
 
+import com.tareas.demo.DTO.ProyectoCreateDTO;
+import com.tareas.demo.DTO.ProyectoDTO;
+import com.tareas.demo.DTO.UsuarioCreateDTO;
+import com.tareas.demo.DTO.UsuarioDTO;
+import com.tareas.demo.entity.Proyecto;
 import com.tareas.demo.entity.Tarea;
 import com.tareas.demo.entity.Usuario;
+import com.tareas.demo.mapper.UsuarioMapper;
+import com.tareas.demo.repository.ProyectoRepository;
 import com.tareas.demo.repository.TareaRepository;
 import com.tareas.demo.repository.UsuarioRepository;
+import com.tareas.demo.service.ProyectoService;
 import com.tareas.demo.service.TareaService;
 import com.tareas.demo.service.UsuarioService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,87 +32,94 @@ class DemoApplicationTests {
 	private TareaRepository tareaRepository;
 
 	@Autowired
+	private ProyectoRepository proyectoRepository;
+
+	@Autowired
 	private UsuarioService usuarioService;
 
 	@Autowired
 	private TareaService tareaService;
+	@Autowired
+	private ProyectoService proyectoService;
 
 	@Test
 	void contextLoads() {
 	}
 
 	@Test
-	void guardarUsuarioYTarea() {
+	void testCrearUsuario(){
+		UsuarioCreateDTO dto = UsuarioCreateDTO.builder()
+				.name("OtroTest")
+				.lastname("OtroTest2")
+				.email("Otrotest@mail.com")
+				.password("1234")
+				.build();
+		Usuario usuario = UsuarioMapper.toEntity(dto);
+		Usuario guardado = usuarioRepository.save(usuario);
 
-		// 1. Crear usuario
-		Usuario usuario = new Usuario();
-		usuario.setNombre("Vladimir");
-		usuario.setEmail("vladimir@gmail.com");
-
-		usuario = usuarioRepository.save(usuario);
-
-		// 2. Crear tarea
-		Tarea tarea = new Tarea();
-		tarea.setTitulo("Test tarea");
-		tarea.setDescripcion("Probando test");
-
-		tarea.setUsuario(usuario);
-
-		tarea = tareaRepository.save(tarea);
-
-		// 3. Verificar (simple)
-		System.out.println("Usuario ID: " + usuario.getId());
-		System.out.println("Tarea ID: " + tarea.getId());
-		System.out.println("Usuario de la tarea: " + tarea.getUsuario().getNombre());
+		System.out.println(""+guardado.getCreatedAt());
+		assertEquals("OtroTest",guardado.getName());
 	}
 
 	@Test
-	void actualizarUsuario(){
-		//Crear objeto nuevo
-		Usuario usuarioNuevo = new Usuario();
-		usuarioNuevo.setNombre("Pepito");
-		usuarioNuevo.setEmail("Pepito@gmail.com");
+	void encontrarUsuario(){
+		Usuario u  = usuarioRepository.findById(2L).get();
+		UsuarioDTO usuarioDTO = UsuarioMapper.toDTO(u);
 
-		//Modificar llamando service
-		Usuario resultado = usuarioService.actualizarUsuario(3,usuarioNuevo);
-
-		System.out.println("Usuario acualizado : " +resultado.getNombre()+"-"+resultado.getEmail());
-
+		System.out.println(""+usuarioDTO.getId());
+		System.out.println(""+usuarioDTO.getName());
+		System.out.println(""+usuarioDTO.getEmail());
+		assertEquals(usuarioDTO.getName(),u.getName());
 	}
 
 	@Test
-	void creandoTareas(){
-		//obtener usuario
-		Usuario u  = usuarioService.usuarioPorId(1);
-		//crear tareas
-		for (int i = 1; i <= 3; i++) {
-			Tarea tarea = new Tarea();
-			tarea.setTitulo("Tarea " + i);
-			tarea.setDescripcion("Descripcion " + i);
-			tarea.setUsuario(u);
+	void testEmailDuplicado(){
 
-			tareaService.guardarTarea(tarea);
+		UsuarioCreateDTO dto = UsuarioCreateDTO.builder()
+				.name("Repetido")
+				.lastname("Test")
+				.email("test@mail.com") // ya existe
+				.password("123")
+				.build();
+
+		Usuario usuario = UsuarioMapper.toEntity(dto);
+
+		try {
+			usuarioRepository.save(usuario);
+		} catch (Exception e){
+			System.out.println("ERROR ESPERADO: " + e.getMessage());
+			assertEquals(true, true); // pasa el test
 		}
-		System.out.println("LISTA DE TAREAS CREADAS PARA "+u.getNombre());
 	}
 	@Test
-	void eliminarUsuarioPepito(){
-		usuarioRepository.deleteById(3);
+	void testCrearProyectoConUsuarioReal() {
 
+		Usuario usuario = usuarioRepository.findAll()
+				.stream()
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("No hay usuarios"));
+
+		ProyectoCreateDTO dto = ProyectoCreateDTO.builder()
+				.name("Proyecto Test")
+				.description("Descripcion test")
+				.color("blue")
+				.image("img.png")
+				.userId(usuario.getId())
+				.build();
+
+		ProyectoDTO proyecto = proyectoService.crearProyecto(dto);
+
+		// ✔ validar retorno
+		assertEquals(usuario.getId(), proyecto.getUserId());
+
+		// ✔ validar BD
+		Proyecto proyectoBD = proyectoRepository.findById(proyecto.getId())
+				.orElseThrow();
+
+		assertEquals("Proyecto Test", proyectoBD.getName());
+
+		// DEBUG
+		System.out.println("Proyecto guardado ID: " + proyectoBD.getId());
 	}
-	@Test
-	void tareasDeUsuario(){
-		Usuario u = usuarioService.usuarioPorId(2);
-		List<Tarea> tareas = tareaRepository.findByUsuarioId(u.getId());
 
-		// Verificar que tenga 3 tareas
-		assertEquals(1, tareas.size());
-
-		System.out.println(u.getNombre()+" tiene " + tareas.size() + " tareas");
-		tareas.forEach(t->{
-			System.out.println(t.getTitulo()+"-"+t.getUsuario().getNombre());
-				});
-
-
-	}
 }

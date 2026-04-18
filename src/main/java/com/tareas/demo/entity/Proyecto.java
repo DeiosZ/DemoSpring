@@ -6,23 +6,24 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "project")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
 public class Proyecto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
+
+    private String name;
     private String description;
     private String color;
     private String image;
+
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id",referencedColumnName = "id")
     private Usuario usuario;
 
     @OneToMany(mappedBy = "proyecto")

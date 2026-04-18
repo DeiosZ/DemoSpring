@@ -5,11 +5,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "tag")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
 public class Tag {
 
     @Id
@@ -17,7 +15,6 @@ public class Tag {
     private Long id;
 
     private String name;
-
     private LocalDateTime createdAt;
 
     @ManyToOne

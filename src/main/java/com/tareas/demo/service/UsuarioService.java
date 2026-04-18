@@ -1,48 +1,37 @@
 package com.tareas.demo.service;
 
+import com.tareas.demo.DTO.LoginDTO;
+import com.tareas.demo.DTO.UsuarioDTO;
 import com.tareas.demo.entity.Usuario;
+import com.tareas.demo.mapper.UsuarioMapper;
 import com.tareas.demo.repository.UsuarioRepository;
+import jakarta.persistence.Access;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class UsuarioService {
 
-    private final UsuarioRepository repo;
+public class UsuarioService {
+    @Autowired
+    private UsuarioRepository repo;
 
     //Listar usuarios
     public List<Usuario> listar(){
         return repo.findAll();
     }
 
-    //buscar por id
-    public Usuario usuarioPorId(Integer id){
-        return repo.findById(id).orElseThrow(()->new RuntimeException("Usuario no encontrado"));
-    }
+    public UsuarioDTO login(LoginDTO dto){
+        Usuario u = repo.findByEmail(dto.getEmail())
+                .orElseThrow(()-> new RuntimeException("Usuario no encontrado"));
 
-    //guardar usuarios
-    public Usuario guardarUsuario(Usuario u){
-        return repo.save(u);
-    }
-
-    //actualizar usuario
-    public Usuario actualizarUsuario(Integer id ,Usuario u){
-        Usuario usuario = usuarioPorId(id);
-        usuario.setNombre(u.getNombre());
-        usuario.setEmail(u.getEmail());
-        return repo.save(usuario);
-    }
-
-    //eliminar usuario
-    public void eliminarUsuario(Integer id){
-        Usuario usuario = usuarioPorId(id);
-        if (usuario.getTareas() != null) {
-            usuario.getTareas().clear();
+        if(!u.getPassword().equals(dto.getPassword())){
+            throw new RuntimeException("Password Incorrecto");
         }
-        repo.delete(usuario);
+        return UsuarioMapper.toDTO(u);
     }
+
 }

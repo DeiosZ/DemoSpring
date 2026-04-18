@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface TareaRepository extends JpaRepository<Tarea,Integer> {
-    List<Tarea> findByUsuarioId(Integer usuarioId);
+
 }

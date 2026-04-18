@@ -23,6 +23,7 @@ public class TareaController {
     public List<Tarea> listar(){
         return tareaService.listarTarea();
     }
+    /*
     @GetMapping("/{id}")
     public Tarea obtener(@PathVariable Integer id) {
         return tareaService.tareaPorId(id);
@@ -47,4 +48,5 @@ public class TareaController {
     public void eliminar(@PathVariable Integer id) {
         tareaService.eliminarTarea(id);
     }
+    */
 }
