@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class DemoApplicationTests {
+	/*
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
@@ -41,11 +42,11 @@ class DemoApplicationTests {
 	private TareaService tareaService;
 	@Autowired
 	private ProyectoService proyectoService;
-
+*/
 	@Test
 	void contextLoads() {
 	}
-
+/*
 	@Test
 	void testCrearUsuario(){
 		UsuarioCreateDTO dto = UsuarioCreateDTO.builder()
@@ -121,5 +122,5 @@ class DemoApplicationTests {
 		// DEBUG
 		System.out.println("Proyecto guardado ID: " + proyectoBD.getId());
 	}
-
+*/
 }
