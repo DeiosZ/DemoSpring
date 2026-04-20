@@ -39,4 +39,8 @@ public class TagService {
 
         return TagMapper.toDTOList(tags);
     }
+
+    public List<TagDTO> listarTags() {
+        return  TagMapper.toDTOList(tagRepo.findAll());
+    }
 }

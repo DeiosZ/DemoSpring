@@ -14,6 +14,11 @@ public class TagController {
 
     private final TagService tagService;
 
+    @GetMapping
+    public List<TagDTO> listarTags() {
+        return tagService.listarTags();
+    }
+
     @GetMapping("/proyecto/{id}")
     public List<TagDTO> listar(@PathVariable Long id){
         return tagService.listarPorProyecto(id);
