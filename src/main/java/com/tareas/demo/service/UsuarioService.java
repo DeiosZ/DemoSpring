@@ -39,7 +39,7 @@ public class UsuarioService {
     }
 
     public UsuarioDTO register(UsuarioCreateDTO dto){
-        if(repo.findByEmail(dto.getEmail())!=null){
+        if(repo.findByEmail(dto.getEmail()).isPresent()){
             throw new RuntimeException("Correo existente");
         }
         Usuario u  = UsuarioMapper.toEntity(dto);
