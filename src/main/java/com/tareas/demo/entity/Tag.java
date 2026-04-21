@@ -18,7 +18,7 @@ public class Tag {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id",nullable = true)
     private Proyecto proyecto;
 
     @ManyToMany(mappedBy = "tags")

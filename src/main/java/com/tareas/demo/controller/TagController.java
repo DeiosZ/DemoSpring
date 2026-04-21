@@ -21,11 +21,16 @@ public class TagController {
 
     @GetMapping("/proyecto/{id}")
     public List<TagDTO> listar(@PathVariable Long id){
-        return tagService.listarPorProyecto(id);
+        return tagService.listarTagsPorProyecto(id);
     }
-
+    //crear tag para proyecto
     @PostMapping("/proyecto/{proyectoId}")
     public Tag crear(@PathVariable Long proyectoId, @RequestBody Tag tag) {
         return tagService.crearTag(proyectoId, tag);
+    }
+    //crear tag global
+    @PostMapping("/global")
+    public Tag crearGlobal(@RequestBody Tag tag) {
+        return tagService.crearTag(null, tag);
     }
 }

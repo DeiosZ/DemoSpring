@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,25 +20,46 @@ public class TagService {
     private final ProyectoRepository proyectoRepo;
 
     public Tag crearTag(Long proyectoId, Tag tag) {
+        // evitar duplicados
+        String nombre = tag.getName().trim();
 
-        Proyecto proyecto = proyectoRepo.findById(proyectoId)
-                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+        // VALIDAR TAG GLOBAL
+        if (proyectoId == null) {
+            if (tagRepo.findByNameAndProyectoIsNull(nombre).isPresent()) {
+                throw new RuntimeException("Tag global ya existe");
+            }
+            tag.setProyecto(null);
+        }
+        // VALIDAR TAG POR PROYECTO
+        else {
+            Proyecto proyecto = proyectoRepo.findById(proyectoId)
+                    .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
 
-        tag.setProyecto(proyecto);
+            if (tagRepo.findByNameAndProyectoId(nombre, proyectoId).isPresent()) {
+                throw new RuntimeException("Tag ya existe en el proyecto");
+            }
+
+            tag.setProyecto(proyecto);
+        }
+
+        tag.setName(nombre);
         tag.setCreatedAt(LocalDateTime.now());
 
         return tagRepo.save(tag);
     }
 
-    public List<TagDTO> listarPorProyecto(Long proyectoId) {
+    public List<TagDTO> listarTagsPorProyecto(Long proyectoId) {
 
-        // opcional: validar que el proyecto exista
         proyectoRepo.findById(proyectoId)
                 .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
 
-        List<Tag> tags = tagRepo.findByProyectoId(proyectoId);
+        List<Tag> resultado = new ArrayList<>();
 
-        return TagMapper.toDTOList(tags);
+        resultado.addAll(tagRepo.findByProyectoIsNull());
+
+        resultado.addAll(tagRepo.findByProyectoId(proyectoId));
+
+        return TagMapper.toDTOList(resultado);
     }
 
     public List<TagDTO> listarTags() {
