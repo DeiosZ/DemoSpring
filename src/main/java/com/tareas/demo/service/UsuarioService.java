@@ -1,6 +1,7 @@
 package com.tareas.demo.service;
 
 import com.tareas.demo.DTO.LoginDTO;
+import com.tareas.demo.DTO.UsuarioCreateDTO;
 import com.tareas.demo.DTO.UsuarioDTO;
 import com.tareas.demo.entity.Usuario;
 import com.tareas.demo.mapper.UsuarioMapper;
@@ -35,6 +36,16 @@ public class UsuarioService {
             throw new RuntimeException("Password Incorrecto");
         }
         return UsuarioMapper.toDTO(u);
+    }
+
+    public UsuarioDTO register(UsuarioCreateDTO dto){
+        if(repo.findByEmail(dto.getEmail())!=null){
+            throw new RuntimeException("Correo existente");
+        }
+        Usuario u  = UsuarioMapper.toEntity(dto);
+        Usuario guardado = repo.save(u);
+        return  UsuarioMapper.toDTO(guardado);
+
     }
 
 }

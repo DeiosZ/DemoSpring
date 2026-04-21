@@ -1,6 +1,7 @@
 package com.tareas.demo.controller;
 
 import com.tareas.demo.DTO.LoginDTO;
+import com.tareas.demo.DTO.UsuarioCreateDTO;
 import com.tareas.demo.DTO.UsuarioDTO;
 import com.tareas.demo.entity.Usuario;
 import com.tareas.demo.service.UsuarioService;
@@ -19,5 +20,9 @@ public class LoginController {
     @PostMapping("/login")
     public UsuarioDTO login(@RequestBody LoginDTO u) {
         return service.login(u);
+    }
+    @PostMapping("/register")
+    public UsuarioDTO register(@RequestBody UsuarioCreateDTO dto) {
+        return service.register(dto);
     }
 }
