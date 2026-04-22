@@ -39,13 +39,15 @@ public class TareaService {
         Prioridad prioridad = prioridadRepo.findById(dto.getPrioridadId())
                 .orElseThrow(() -> new RuntimeException("Prioridad no encontrada"));
 
-        List<Tag> tags = tagRepo.findByIdInAndProyectoId(
-                dto.getTagIds(),
-                proyectoId
-        );
+        List<Tag> tags = List.of();
 
-        if (tags.size() != dto.getTagIds().size()) {
-            throw new RuntimeException("Uno o más tags no pertenecen al proyecto");
+        if (dto.getTagIds() != null && !dto.getTagIds().isEmpty()) {
+
+            tags = tagRepo.findByIdIn(dto.getTagIds());
+
+            if (tags.size() != dto.getTagIds().size()) {
+                throw new RuntimeException("Uno o más tags no existen");
+            }
         }
 
         Tarea tarea = TareaMapper.toEntity(dto, proyecto, prioridad, tags);

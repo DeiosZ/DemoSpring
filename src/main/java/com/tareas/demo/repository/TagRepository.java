@@ -14,4 +14,6 @@ public interface TagRepository extends JpaRepository<Tag,Long> {
     List<Tag> findByProyectoIsNull(); //si no añadimos ningun tag al proyecto
     Optional<Tag> findByNameAndProyectoId(String name, Long proyectoId);
     Optional<Tag> findByNameAndProyectoIsNull(String name);
+
+    List<Tag> findByIdIn(List<Long> ids);
 }
