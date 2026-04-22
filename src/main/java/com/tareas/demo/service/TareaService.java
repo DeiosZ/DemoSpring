@@ -42,7 +42,6 @@ public class TareaService {
         List<Tag> tags = List.of();
 
         if (dto.getTagIds() != null && !dto.getTagIds().isEmpty()) {
-
             tags = tagRepo.findByIdIn(dto.getTagIds());
 
             if (tags.size() != dto.getTagIds().size()) {

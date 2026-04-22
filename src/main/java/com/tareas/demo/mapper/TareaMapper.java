@@ -20,11 +20,13 @@ public class TareaMapper {
                 .finishAt(t.getFinishAt())
                 .isFinish(t.getIsFinish())
                 .projectId(t.getProyecto().getId())
-                .priorityId(t.getPrioridad().getId())
-                .tagIds(t.getTags()
-                        .stream()
-                        .map(tag -> tag.getId())
-                        .toList()
+                .priorityName(t.getPrioridad().getName())
+                .priorityColor(t.getPrioridad().getColor())
+                .tagNames(
+                        t.getTags()
+                                .stream()
+                                .map(Tag::getName)
+                                .toList()
                 )
                 .build();
     }

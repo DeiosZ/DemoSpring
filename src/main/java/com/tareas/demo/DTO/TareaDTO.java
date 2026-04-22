@@ -15,8 +15,9 @@ public class TareaDTO {
     private LocalDateTime startAt;
     private LocalDateTime finishAt;
     private Boolean isFinish;
-
     private Long projectId;
-    private Long priorityId;
-    private List<Long> tagIds;
+
+    private String priorityName;
+    private String priorityColor;
+    private List<String> tagNames;
 }
