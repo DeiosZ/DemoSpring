@@ -26,5 +26,10 @@ public class ProyectoController {
         return service.crearProyecto(dto);
     }
 
-
+    //asignar tags
+    @PostMapping("/{id}/tags")
+    public void asignarTags( @PathVariable Long id, @RequestBody List<Long> tagIds)
+    {
+        service.asignarTags(id, tagIds);
+    }
 }
