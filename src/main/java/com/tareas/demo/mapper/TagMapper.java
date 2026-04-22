@@ -11,7 +11,11 @@ public class TagMapper {
                 .id(t.getId())
                 .name(t.getName())
                 .createdAt(t.getCreatedAt())
-                .proyectoId(t.getProyecto().getId())
+                .proyectoId(
+                        t.getProyecto() != null
+                                ? t.getProyecto().getId()
+                                : null
+                )
                 .build();
     }
     public static List<TagDTO> toDTOList(List<Tag> tags) {
