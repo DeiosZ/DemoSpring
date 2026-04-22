@@ -31,13 +31,9 @@ public class TareaService {
                 .toList();
     }
 
-    public TareaDTO crearTarea(TareaCreateDTO dto) {
+    public TareaDTO crearTarea(Long proyectoId,TareaCreateDTO dto) {
 
-        if (dto.getTagIds() == null || dto.getTagIds().isEmpty()) {
-            throw new RuntimeException("Debe enviar tagIds");
-        }
-
-        Proyecto proyecto = proyectoRepo.findById(dto.getProyectoId())
+        Proyecto proyecto = proyectoRepo.findById(proyectoId)
                 .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
 
         Prioridad prioridad = prioridadRepo.findById(dto.getPrioridadId())
@@ -45,7 +41,7 @@ public class TareaService {
 
         List<Tag> tags = tagRepo.findByIdInAndProyectoId(
                 dto.getTagIds(),
-                dto.getProyectoId()
+                proyectoId
         );
 
         if (tags.size() != dto.getTagIds().size()) {

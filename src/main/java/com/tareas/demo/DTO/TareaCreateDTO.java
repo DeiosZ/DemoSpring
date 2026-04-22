@@ -12,7 +12,7 @@ public class TareaCreateDTO {
     private String name;
     private String description;
     private LocalDateTime startAt;
-    private Long proyectoId;
+
     private Long prioridadId;
     private List<Long> tagIds;
 }

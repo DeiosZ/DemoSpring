@@ -28,12 +28,12 @@ public class TareaController {
         return tareaService.listarPorProyecto(id);
     }
 
-    @PostMapping("/proyecto/{proyectoId}")
+    @PostMapping("/proyecto/{proyectoId}/crear")
     public TareaDTO crear(
             @PathVariable Long proyectoId,
             @RequestBody TareaCreateDTO dto
     ) {
-        dto.setProyectoId(proyectoId);
-        return tareaService.crearTarea(dto);
+
+        return tareaService.crearTarea(proyectoId,dto);
     }
 }
