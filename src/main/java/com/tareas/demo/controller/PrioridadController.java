@@ -1,5 +1,6 @@
 package com.tareas.demo.controller;
-import com.tareas.demo.entity.Prioridad;
+import com.tareas.demo.DTO.PrioridadDTO;
+import com.tareas.demo.mapper.PrioridadMapper;
 import com.tareas.demo.repository.PrioridadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,11 @@ public class PrioridadController {
     private PrioridadRepository prioridadRepo;
 
     @GetMapping
-    public List<Prioridad> listarPrioridades() {
-        return prioridadRepo.findAll();
+    public List<PrioridadDTO> listarPrioridades() {
+
+        return prioridadRepo.findAll()
+                .stream()
+                .map(PrioridadMapper::toDTO)
+                .toList();
     }
 }
