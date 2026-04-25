@@ -52,16 +52,39 @@ public class ProyectoService {
 
         for(Tag tag : tags){
 
-            // ✔ si es global → lo asignamos al proyecto
+            //  si es global → lo asignamos al proyecto
             if(tag.getProyecto() == null){
                 tag.setProyecto(proyecto);
             }
-            // ❌ si pertenece a otro proyecto
+            //  si pertenece a otro proyecto
             else if(!tag.getProyecto().getId().equals(proyectoId)){
                 throw new RuntimeException("Tag pertenece a otro proyecto");
             }
         }
 
         tagRepository.saveAll(tags);
+    }
+    public ProyectoDTO actualizarProyecto(Long id, ProyectoCreateDTO dto) {
+
+        Proyecto proyecto = proyectoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+
+        Usuario usuario = usuarioRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("Usuario no existe"));
+
+        proyecto.setName(dto.getName());
+        proyecto.setDescription(dto.getDescription());
+        proyecto.setColor(dto.getColor());
+        proyecto.setImage(dto.getImage());
+        proyecto.setUsuario(usuario);
+
+        return ProyectoMapper.toDTO(proyectoRepository.save(proyecto));
+    }
+
+    public void eliminarProyecto(Long id) {
+        Proyecto proyecto = proyectoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+
+        proyectoRepository.delete(proyecto);
     }
 }

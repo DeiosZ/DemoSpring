@@ -32,4 +32,17 @@ public class ProyectoController {
     {
         service.asignarTags(id, tagIds);
     }
+
+    @PutMapping("/{id}")
+    public ProyectoDTO actualizar(
+            @PathVariable Long id,
+            @RequestBody ProyectoCreateDTO dto
+    ) {
+        return service.actualizarProyecto(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminar(@PathVariable Long id) {
+        service.eliminarProyecto(id);
+    }
 }

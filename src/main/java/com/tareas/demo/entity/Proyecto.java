@@ -26,9 +26,9 @@ public class Proyecto {
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "proyecto")
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tarea> tareas;
 
-    @OneToMany(mappedBy = "proyecto")
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags;
 }
