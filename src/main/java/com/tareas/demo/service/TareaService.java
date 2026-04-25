@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -52,6 +53,47 @@ public class TareaService {
         Tarea tarea = TareaMapper.toEntity(dto, proyecto, prioridad, tags);
 
         return TareaMapper.toDTO(tareaRepo.save(tarea));
+    }
+
+    public TareaDTO actualizarTarea(Long tareaId , TareaCreateDTO dto) {
+        Tarea tarea = tareaRepo.findById(tareaId)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+        Prioridad prioridad = prioridadRepo.findById(dto.getPrioridadId())
+                .orElseThrow(() -> new RuntimeException("Prioridad no encontrada"));
+        List<Tag> tags = List.of();
+
+        if(dto.getTagIds() != null && !dto.getTagIds().isEmpty()) {
+            tags = tagRepo.findByIdIn(dto.getTagIds());
+            if(tags.size() != dto.getTagIds().size()) {
+                throw new RuntimeException("Uno o más tags no existen");
+            }
+        }
+        tarea.setName(dto.getName());
+        tarea.setDescription(dto.getDescription());
+        tarea.setStartAt(dto.getStartAt());
+        tarea.setPrioridad(prioridad);
+        tarea.setTags(tags);
+        return TareaMapper.toDTO(tareaRepo.save(tarea));
+    }
+
+    public TareaDTO completarTarea(Long tareaId) {
+        Tarea tarea = tareaRepo.findById(tareaId)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+        if (Boolean.TRUE.equals(tarea.getIsFinish())) {
+            throw new RuntimeException("La tarea ya está completada");
+        }
+        tarea.setIsFinish(true);
+        tarea.setFinishAt(LocalDateTime.now());
+        return TareaMapper.toDTO(tareaRepo.save(tarea));
+    }
+
+    public void eliminarTarea(Long tareaId) {
+        Tarea tarea = tareaRepo.findById(tareaId)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+        if(!tarea.getIsFinish()) {
+            throw new RuntimeException("Tarea no se puede eliminar");
+        }
+        tareaRepo.delete(tarea);
     }
 
 }

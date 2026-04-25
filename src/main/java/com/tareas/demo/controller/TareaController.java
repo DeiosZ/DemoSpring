@@ -36,4 +36,18 @@ public class TareaController {
 
         return tareaService.crearTarea(proyectoId,dto);
     }
+
+    @PutMapping("/{id}")
+    public TareaDTO actualizarTarea(@PathVariable Long id,
+                                    @RequestBody TareaCreateDTO dto){
+        return tareaService.actualizarTarea(id,dto);
+    }
+    @PutMapping("/{id}/completar")
+    public TareaDTO completarTarea(@PathVariable Long id) {
+        return tareaService.completarTarea(id);
+    }
+    @DeleteMapping("/{id}")
+    public void eliminarTarea(@PathVariable Long id) {
+        tareaService.eliminarTarea(id);
+    }
 }
