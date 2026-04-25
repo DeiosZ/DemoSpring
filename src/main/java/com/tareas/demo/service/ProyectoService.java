@@ -86,9 +86,14 @@ public class ProyectoService {
         Proyecto proyecto = proyectoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
 
+
         for (Tarea tarea : proyecto.getTareas()) {
-            tarea.getTags().clear();
+            if (tarea.getTags() != null) {
+                tarea.getTags().clear();
+            }
         }
+
+        proyectoRepository.save(proyecto);
 
         proyectoRepository.delete(proyecto);
     }
