@@ -12,6 +12,7 @@ import com.tareas.demo.mapper.ProyectoMapper;
 import com.tareas.demo.repository.ProyectoRepository;
 import com.tareas.demo.repository.TagRepository;
 import com.tareas.demo.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,18 +83,10 @@ public class ProyectoService {
         return ProyectoMapper.toDTO(proyectoRepository.save(proyecto));
     }
 
+    @Transactional
     public void eliminarProyecto(Long id) {
         Proyecto proyecto = proyectoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
-
-
-        for (Tarea tarea : proyecto.getTareas()) {
-            if (tarea.getTags() != null) {
-                tarea.getTags().clear();
-            }
-        }
-
-        proyectoRepository.save(proyecto);
+                .orElseThrow(() -> new IllegalArgumentException("Proyecto con ID " + id + " no encontrado"));
 
         proyectoRepository.delete(proyecto);
     }
