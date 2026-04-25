@@ -22,6 +22,10 @@ public class TareaController {
     @Autowired
     private TareaService tareaService;
 
+    @GetMapping("/{id}")
+    public TareaDTO obtenerPorId(@PathVariable Long id) {
+        return tareaService.obtenerPorId(id);
+    }
 
     @GetMapping("/proyecto/{id}")
     public List<TareaDTO> listar(@PathVariable Long id){

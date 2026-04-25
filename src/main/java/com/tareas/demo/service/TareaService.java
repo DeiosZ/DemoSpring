@@ -23,7 +23,12 @@ public class TareaService {
     @Autowired
     private  TareaRepository tareaRepo;
 
+    public TareaDTO obtenerPorId(Long id) {
+        Tarea tarea = tareaRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
 
+        return TareaMapper.toDTO(tarea);
+    }
     //listar tareas
     public List<TareaDTO> listarPorProyecto(Long proyectoId) {
         return tareaRepo.findByProyectoId(proyectoId)
