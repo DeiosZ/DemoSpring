@@ -6,6 +6,7 @@ import com.tareas.demo.DTO.ProyectoDTO;
 import com.tareas.demo.DTO.TagDTO;
 import com.tareas.demo.entity.Proyecto;
 import com.tareas.demo.entity.Tag;
+import com.tareas.demo.entity.Tarea;
 import com.tareas.demo.entity.Usuario;
 import com.tareas.demo.mapper.ProyectoMapper;
 import com.tareas.demo.repository.ProyectoRepository;
@@ -84,6 +85,10 @@ public class ProyectoService {
     public void eliminarProyecto(Long id) {
         Proyecto proyecto = proyectoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Proyecto no encontrado"));
+
+        for (Tarea tarea : proyecto.getTareas()) {
+            tarea.getTags().clear();
+        }
 
         proyectoRepository.delete(proyecto);
     }
